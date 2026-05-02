@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-accent="ember">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ThinkingOutLoud">
+<title>ThinkingOutLoud</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+/* ── ACCENT VARIANTS (default ember) ────────────────── */
+:root,
+html[data-accent="ember"], body[data-accent="ember"] {
+  --accent: #F7630C;
+  --accent-dim: rgba(247,99,12,0.12);
+  --accent-glow: rgba(247,99,12,0.35);
+  --accent-soft: rgba(247,99,12,0.06);
+  --accent-deep: #D6520A;
+}
+html[data-accent="crimson"], body[data-accent="crimson"] {
+  --accent: #DC2626;
+  --accent-dim: rgba(220,38,38,0.12);
+  --accent-glow: rgba(220,38,38,0.35);
+  --accent-soft: rgba(220,38,38,0.06);
+  --accent-deep: #B91C1C;
+}
+html[data-accent="forest"], body[data-accent="forest"] {
+  --accent: #15803D;
+  --accent-dim: rgba(21,128,61,0.14);
+  --accent-glow: rgba(21,128,61,0.35);
+  --accent-soft: rgba(21,128,61,0.07);
+  --accent-deep: #166534;
+}
+html[data-accent="cobalt"], body[data-accent="cobalt"] {
+  --accent: #2563EB;
+  --accent-dim: rgba(37,99,235,0.13);
+  --accent-glow: rgba(37,99,235,0.35);
+  --accent-soft: rgba(37,99,235,0.06);
+  --accent-deep: #1E40AF;
+}
+html[data-accent="plum"], body[data-accent="plum"] {
+  --accent: #7C3AED;
+  --accent-dim: rgba(124,58,237,0.13);
+  --accent-glow: rgba(124,58,237,0.35);
+  --accent-soft: rgba(124,58,237,0.06);
+  --accent-deep: #6D28D9;
+}
+html[data-accent="graphite"], body[data-accent="graphite"] {
+  --accent: #475569;
+  --accent-dim: rgba(71,85,105,0.16);
+  --accent-glow: rgba(71,85,105,0.35);
+  --accent-soft: rgba(71,85,105,0.08);
+  --accent-deep: #334155;
+}
+/* Theme attribute on html OR body for max reliability */
+html[data-theme="dark"], body[data-theme="dark"] {
+  --bg: #0D0A07; --bg-raised: #141009; --surface: #1A1410;
+  --border: #2A2218; --border-mid: #3A3020;
+  --text: #EDE8DF; --text-mid: #8C8070; --text-dim: #4A4035; --text-interim: #B8A890;
+  --pill-bg: #1A1410; --overlay: rgba(0,0,0,0.7);
+  --shadow-modal: 0 24px 60px rgba(0,0,0,0.55);
+  --shadow-toast: 0 8px 24px rgba(0,0,0,0.45);
+}
+html[data-theme="light"], body[data-theme="light"] {
+  --bg: #FAF7F2; --bg-raised: #FFFDF8; --surface: #F0EAE0;
+  --border: #DCD3C2; --border-mid: #C4B8A2;
+  --text: #1A1410; --text-mid: #6B5F4F; --text-dim: #A89E8C; --text-interim: #8A8070;
+  --pill-bg: #F0EAE0; --overlay: rgba(40,30,20,0.45);
+  --shadow-modal: 0 24px 60px rgba(60,40,20,0.18);
+  --shadow-toast: 0 8px 24px rgba(60,40,20,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; height: 100dvh; }
+
+html {
+  background: var(--bg);
+  transition: background 0.35s ease;
+}
+
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--font-mono);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px 14px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+.logo-wrap { display: flex; flex-direction: column; gap: 1px; }
+.logo {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 20px; letter-spacing: -0.5px;
+  color: var(--text); line-height: 1;
+  transition: color 0.35s ease;
+}
+.logo em { font-style: italic; color: var(--accent); }
+.logo-sub {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 400;
+  transition: color 0.35s ease;
+}
+.header-right { display: flex; align-items: center; gap: 8px; }
+
+.status-pill {
+  font-size: 9px; font-weight: 500; letter-spacing: 1.8px; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--pill-bg);
+  color: var(--text-dim);
+  transition: all 0.3s ease; white-space: nowrap;
+}
+.status-pill.listening, .status-pill.polishing {
+  border-color: var(--accent); color: var(--accent); background: var(--accent-dim);
+}
+.status-pill.listening { animation: pill-pulse 2s ease-in-out infinite; }
+@keyframes pill-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-dim); }
+  50%      { box-shadow: 0 0 0 5px transparent; }
+}
+
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text-mid);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.icon-btn:active { background: var(--surface); transform: scale(0.93); }
+
+.transcript-wrapper {
+  flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: 24px 22px 16px;
+  background: var(--bg);
+  transition: background 0.35s ease;
+}
+.transcript-area { min-height: 100%; position: relative; }
+
+.empty-state {
+  position: absolute; top: 0; left: 0;
+  font-family: var(--font-display); font-style: italic; font-weight: 300;
+  font-size: 18px; color: var(--text-dim); line-height: 1.6;
+  pointer-events: none;
+  transition: opacity 0.4s ease, color 0.35s ease;
+}
+.empty-state .tagline {
+  display: block; font-family: var(--font-mono); font-style: normal;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 14px; opacity: 0.6;
+}
+.empty-state.hidden { opacity: 0; }
+
+#final-text, #interim-text {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: 19px; line-height: 1.75;
+  white-space: pre-wrap; word-break: break-word;
+  transition: color 0.35s ease;
+}
+#final-text { color: var(--text); }
+#interim-text { color: var(--text-interim); font-style: italic; }
+#final-text.polished { animation: polish-reveal 0.6s ease; }
+@keyframes polish-reveal {
+  0%   { opacity: 0; transform: translateY(4px); filter: blur(2px); }
+  100% { opacity: 1; transform: translateY(0);  filter: blur(0);  }
+}
+
+.waveform {
+  display: flex; align-items: center; gap: 3.5px;
+  height: 24px; margin-top: 14px;
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.waveform.active { opacity: 1; }
+.wave-bar {
+  width: 2.5px; background: var(--accent);
+  border-radius: 2px; transform-origin: bottom;
+  animation: wave-anim 0.9s ease-in-out infinite;
+}
+.wave-bar:nth-child(1) { height: 5px;  animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 10px; animation-delay: 0.08s; }
+.wave-bar:nth-child(3) { height: 16px; animation-delay: 0.16s; }
+.wave-bar:nth-child(4) { height: 20px; animation-delay: 0.24s; }
+.wave-bar:nth-child(5) { height: 24px; animation-delay: 0.32s; }
+.wave-bar:nth-child(6) { height: 20px; animation-delay: 0.40s; }
+.wave-bar:nth-child(7) { height: 16px; animation-delay: 0.48s; }
+.wave-bar:nth-child(8) { height: 10px; animation-delay: 0.56s; }
+.wave-bar:nth-child(9) { height: 5px;  animation-delay: 0.64s; }
+@keyframes wave-anim {
+  0%, 100% { transform: scaleY(0.3); opacity: 0.4; }
+  50%      { transform: scaleY(1);   opacity: 1; }
+}
+
+.meta-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 22px; flex-shrink: 0;
+  background: var(--bg);
+  transition: background 0.35s ease;
+}
+.meta-label {
+  font-size: 10px; color: var(--text-dim);
+  letter-spacing: 1px; text-transform: uppercase;
+  transition: color 0.35s ease;
+}
+
+.controls {
+  padding: 10px 22px 28px;
+  flex-shrink: 0; background: var(--bg);
+  transition: background 0.35s ease;
+}
+
+.mic-btn {
+  width: 100%; height: 70px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border-mid);
+  background: var(--surface); color: var(--text);
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 16px; letter-spacing: 0.2px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  transition: all 0.25s ease;
+  position: relative; overflow: hidden;
+  -webkit-appearance: none; outline: none;
+}
+.mic-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255,255,255,0.015) 8px, rgba(255,255,255,0.015) 9px);
+  pointer-events: none;
+}
+html[data-theme="light"] .mic-btn::before,
+body[data-theme="light"] .mic-btn::before {
+  background: repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(0,0,0,0.02) 8px, rgba(0,0,0,0.02) 9px);
+}
+.mic-btn:active { transform: scale(0.985); }
+.mic-btn.listening {
+  border-color: var(--accent); background: var(--accent-dim);
+  box-shadow: 0 0 0 4px var(--accent-soft), 0 8px 32px var(--accent-glow);
+  color: var(--accent);
+}
+.mic-btn.listening .mic-icon-wrap { filter: drop-shadow(0 0 8px var(--accent)); }
+.mic-icon-wrap {
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: filter 0.25s ease;
+}
+
+/* MODEL TOGGLE */
+.model-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-top: 10px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+.model-option {
+  height: 40px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-mid);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all 0.25s ease;
+  -webkit-appearance: none; outline: none;
+  position: relative;
+  z-index: 1;
+}
+
+.model-option.active {
+  background: var(--accent);
+  color: #FFF;
+  box-shadow: 0 2px 8px var(--accent-soft);
+}
+.model-option.active .model-tag {
+  background: rgba(255,255,255,0.18);
+  color: #FFF;
+}
+
+.model-option:not(.active):active { background: var(--bg-raised); }
+
+.model-tag {
+  font-size: 8px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--border);
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.model-helper {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  text-align: center;
+  font-family: var(--font-mono);
+  transition: color 0.3s ease;
+}
+
+.model-helper em {
+  color: var(--accent);
+  font-style: normal;
+}
+
+/* POLISH */
+.polish-btn {
+  width: 100%; height: 52px;
+  margin-top: 10px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--accent);
+  background: var(--accent); color: #FFF;
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 14px; letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all 0.25s ease;
+  position: relative; overflow: hidden;
+  -webkit-appearance: none; outline: none;
+}
+.polish-btn:active:not(:disabled) { transform: scale(0.985); background: var(--accent-deep); }
+.polish-btn:disabled {
+  background: transparent; border-color: var(--border);
+  color: var(--text-dim); cursor: not-allowed;
+}
+.polish-btn.busy {
+  background: transparent; border-color: var(--accent); color: var(--accent);
+}
+.polish-btn.busy::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.spinner {
+  width: 14px; height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.action-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px; margin-top: 8px;
+}
+.action-btn {
+  height: 44px; border-radius: var(--radius-md);
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text-mid);
+  font-family: var(--font-mono); font-size: 11px;
+  font-weight: 400; letter-spacing: 0.8px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: all 0.2s ease;
+  -webkit-appearance: none; outline: none; white-space: nowrap;
+}
+.action-btn:active { transform: scale(0.96); }
+.action-btn.copy.done { border-color: #4CAF7D; color: #4CAF7D; }
+.action-btn.clear:active { border-color: #E05555; color: #E05555; }
+.action-btn.share:active { border-color: var(--accent); color: var(--accent); }
+
+.toast {
+  position: fixed; bottom: 130px; left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: var(--surface);
+  border: 1px solid var(--border-mid);
+  color: var(--text);
+  font-family: var(--font-mono); font-size: 11px;
+  padding: 9px 16px; border-radius: var(--radius-sm);
+  opacity: 0; transition: all 0.3s ease;
+  pointer-events: none; white-space: nowrap;
+  z-index: 200; box-shadow: var(--shadow-toast);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: var(--overlay);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; z-index: 300;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  overflow-y: auto;
+}
+.modal-overlay.show { opacity: 1; pointer-events: auto; }
+.modal {
+  width: 100%; max-width: 440px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px 22px;
+  transform: translateY(12px);
+  transition: transform 0.3s ease, background 0.35s ease, border-color 0.35s ease;
+  box-shadow: var(--shadow-modal);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-overlay.show .modal { transform: translateY(0); }
+.modal h2 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 22px; margin-bottom: 6px; color: var(--text);
+}
+.modal h2 em { font-style: italic; color: var(--accent); }
+.modal p {
+  font-family: var(--font-mono); font-size: 12px;
+  line-height: 1.7; color: var(--text-mid);
+  margin-bottom: 14px;
+}
+.modal p a { color: var(--accent); text-decoration: none; }
+.modal-input {
+  width: 100%; padding: 14px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-mid);
+  background: var(--surface); color: var(--text);
+  font-family: var(--font-mono); font-size: 13px;
+  outline: none; transition: border-color 0.2s ease;
+  -webkit-appearance: none;
+}
+.modal-input:focus { border-color: var(--accent); }
+.modal-input::placeholder { color: var(--text-dim); }
+.modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+.modal-btn {
+  flex: 1; height: 46px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-mid);
+  background: transparent; color: var(--text-mid);
+  font-family: var(--font-mono); font-size: 12px;
+  font-weight: 500; letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+}
+.modal-btn:active { transform: scale(0.97); }
+.modal-btn.primary {
+  background: var(--accent); border-color: var(--accent); color: #FFF;
+}
+.modal-btn.primary:active { background: var(--accent-deep); }
+.modal-btn.danger:active { border-color: #E05555; color: #E05555; }
+.modal-footer {
+  font-family: var(--font-mono); font-size: 10px;
+  color: var(--text-dim); margin-top: 16px;
+  text-align: center; letter-spacing: 0.5px; line-height: 1.6;
+}
+
+/* Settings section labels */
+.settings-section {
+  margin-bottom: 18px;
+}
+.settings-section-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  margin-bottom: 10px;
+  margin-top: 4px;
+  font-weight: 500;
+  transition: color 0.35s ease;
+}
+
+/* Accent picker */
+.accent-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.accent-swatch {
+  position: relative;
+  height: 64px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+  -webkit-appearance: none;
+  outline: none;
+  padding: 0;
+}
+.accent-swatch:active { transform: scale(0.96); }
+.accent-swatch.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft), 0 4px 12px var(--accent-glow);
+}
+.swatch-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -1px 1px rgba(0,0,0,0.15);
+}
+.swatch-name {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  font-weight: 500;
+  transition: color 0.25s ease;
+}
+.accent-swatch.active .swatch-name {
+  color: var(--text);
+}
+
+/* Settings model sections */
+.key-section {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  background: var(--surface);
+}
+.key-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.key-section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+}
+.key-status {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.key-status.set {
+  background: rgba(76,175,125,0.15);
+  color: #4CAF7D;
+  border: 1px solid rgba(76,175,125,0.4);
+}
+.key-status.unset {
+  background: var(--border);
+  color: var(--text-dim);
+}
+.key-section-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+.key-section-actions {
+  display: flex;
+  gap: 8px;
+}
+.key-section-btn {
+  flex: 1;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  background: transparent;
+  color: var(--text-mid);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+}
+.key-section-btn:active { transform: scale(0.97); border-color: var(--accent); color: var(--accent); }
+.key-section-btn.danger:active { border-color: #E05555; color: #E05555; }
+
+.no-support {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 28px; text-align: center; gap: 14px;
+}
+.no-support h2 { font-family: var(--font-display); font-size: 22px; color: #E05555; }
+.no-support p { font-size: 13px; color: var(--text-mid); line-height: 1.8; }
+
+.transcript-wrapper::-webkit-scrollbar { width: 3px; }
+.transcript-wrapper::-webkit-scrollbar-track { background: transparent; }
+.transcript-wrapper::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo-wrap">
+    <div class="logo">Thinking<em>OutLoud</em></div>
+    <div class="logo-sub">on-device · dual model polish</div>
+  </div>
+  <div class="header-right">
+    <div class="status-pill" id="status-pill">idle</div>
+    <button class="icon-btn" onclick="openSettings()" aria-label="Settings">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </button>
+    <button class="icon-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <svg id="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<div class="transcript-wrapper" id="transcript-wrapper">
+  <div class="transcript-area">
+    <div class="empty-state" id="empty-state">
+      tap the button and start speaking
+      <span class="tagline">// dictate · choose model · polish</span>
+    </div>
+    <div id="final-text"></div>
+    <div id="interim-text"></div>
+    <div class="waveform" id="waveform">
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+      <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    </div>
+  </div>
+</div>
+
+<div class="meta-bar">
+  <span class="meta-label" id="word-count">0 words</span>
+  <span class="meta-label" id="duration-label">en-GB</span>
+</div>
+
+<div class="controls">
+  <button class="mic-btn" id="mic-btn" onclick="toggleListening()">
+    <span class="mic-icon-wrap">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="22"/>
+      </svg>
+    </span>
+    <span id="btn-label">Start Dictating</span>
+  </button>
+
+  <!-- Model toggle -->
+  <div class="model-toggle">
+    <button class="model-option active" id="opt-claude" onclick="setActiveModel('claude')">
+      <span>Claude</span>
+      <span class="model-tag">WORK</span>
+    </button>
+    <button class="model-option" id="opt-grok" onclick="setActiveModel('grok')">
+      <span>Grok</span>
+      <span class="model-tag">GENERAL</span>
+    </button>
+  </div>
+
+  <div class="model-helper" id="model-helper">
+    polishing via <em id="active-model-name">Claude Sonnet 4</em>
+  </div>
+
+  <button class="polish-btn" id="polish-btn" onclick="polishText()" disabled>
+    <span id="polish-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/>
+      </svg>
+    </span>
+    <span id="polish-label">Polish</span>
+  </button>
+
+  <div class="action-row">
+    <button class="action-btn copy" id="copy-btn" onclick="copyText()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="9" y="9" width="13" height="13" rx="2"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+      </svg>
+      Copy
+    </button>
+    <button class="action-btn share" onclick="shareText()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+        <polyline points="16 6 12 2 8 6"/>
+        <line x1="12" y1="2" x2="12" y2="15"/>
+      </svg>
+      Share
+    </button>
+    <button class="action-btn clear" onclick="clearText()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+      </svg>
+      Clear
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Single-key entry modal (used for both providers) -->
+<div class="modal-overlay" id="key-modal">
+  <div class="modal">
+    <h2 id="key-modal-title">Connect <em>Claude</em></h2>
+    <p id="key-modal-desc">To polish via Claude, ThinkingOutLoud sends text to Anthropic using your own API key. Stored only on this device, never on a server.<br><br>Get one at <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a></p>
+    <input type="password" class="modal-input" id="key-input" placeholder="sk-ant-..." autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeKeyModal()">Cancel</button>
+      <button class="modal-btn primary" id="key-save-btn" onclick="saveApiKey()">Save & Polish</button>
+    </div>
+    <div class="modal-footer">stored locally · cleared with browser data</div>
+  </div>
+</div>
+
+<!-- Settings modal -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <h2>Settings</h2>
+    <p>Customise appearance and manage API keys. Everything is stored only on this device.</p>
+
+    <div class="settings-section">
+      <div class="settings-section-title">Accent Colour</div>
+      <div class="accent-grid">
+        <button class="accent-swatch" data-accent="ember" onclick="setAccent('ember')">
+          <span class="swatch-dot" style="background:#F7630C"></span>
+          <span class="swatch-name">Ember</span>
+        </button>
+        <button class="accent-swatch" data-accent="crimson" onclick="setAccent('crimson')">
+          <span class="swatch-dot" style="background:#DC2626"></span>
+          <span class="swatch-name">Crimson</span>
+        </button>
+        <button class="accent-swatch" data-accent="forest" onclick="setAccent('forest')">
+          <span class="swatch-dot" style="background:#15803D"></span>
+          <span class="swatch-name">Forest</span>
+        </button>
+        <button class="accent-swatch" data-accent="cobalt" onclick="setAccent('cobalt')">
+          <span class="swatch-dot" style="background:#2563EB"></span>
+          <span class="swatch-name">Cobalt</span>
+        </button>
+        <button class="accent-swatch" data-accent="plum" onclick="setAccent('plum')">
+          <span class="swatch-dot" style="background:#7C3AED"></span>
+          <span class="swatch-name">Plum</span>
+        </button>
+        <button class="accent-swatch" data-accent="graphite" onclick="setAccent('graphite')">
+          <span class="swatch-dot" style="background:#475569"></span>
+          <span class="swatch-name">Graphite</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-section-title">API Keys</div>
+
+      <div class="key-section">
+        <div class="key-section-header">
+          <div class="key-section-title">Claude <em style="font-style:italic;color:var(--accent);">·</em> <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1px;color:var(--text-dim);">SONNET 4</span></div>
+          <span class="key-status unset" id="claude-status">unset</span>
+        </div>
+        <div class="key-section-meta">Anthropic API · ~$0.005/polish · no training on inputs</div>
+        <div class="key-section-actions">
+          <button class="key-section-btn" onclick="openKeyModalFor('claude')">Set Key</button>
+          <button class="key-section-btn danger" onclick="clearApiKeyFor('claude')">Remove</button>
+        </div>
+      </div>
+
+      <div class="key-section">
+        <div class="key-section-header">
+          <div class="key-section-title">Grok <em style="font-style:italic;color:var(--accent);">·</em> <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:1px;color:var(--text-dim);">4.1 FAST</span></div>
+          <span class="key-status unset" id="grok-status">unset</span>
+        </div>
+        <div class="key-section-meta">xAI API · ~$0.0008/polish · review xAI data settings</div>
+        <div class="key-section-actions">
+          <button class="key-section-btn" onclick="openKeyModalFor('grok')">Set Key</button>
+          <button class="key-section-btn danger" onclick="clearApiKeyFor('grok')">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-btn primary" onclick="closeSettings()">Done</button>
+    </div>
+    <div class="modal-footer">v1.5 · auto-saved drafts</div>
+  </div>
+</div>
+
+<!-- Microphone permission modal (intro + blocked) -->
+<div class="modal-overlay" id="mic-modal">
+  <div class="modal">
+    <h2 id="mic-modal-title">Allow <em>Microphone</em></h2>
+    <p id="mic-modal-body"></p>
+    <div class="modal-actions">
+      <button class="modal-btn" id="mic-modal-cancel" onclick="closeMicModal()">Not Now</button>
+      <button class="modal-btn primary" id="mic-modal-primary">Continue</button>
+    </div>
+    <div class="modal-footer">audio processed on-device · never uploaded</div>
+  </div>
+</div>
+
+<script>
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+if (!SR) {
+  document.querySelector('.transcript-wrapper').innerHTML = `
+    <div class="no-support">
+      <h2>Not supported</h2>
+      <p>ThinkingOutLoud needs Safari on iOS 14.5+, or a Chromium-based browser on desktop.<br><br>Make sure you're not in Private Browsing mode.</p>
+    </div>`;
+  document.querySelector('.controls').style.display = 'none';
+  document.querySelector('.meta-bar').style.display = 'none';
+}
+
+let recognition;
+let isListening = false;
+let keepGoing = false;
+let finalText = '';
+let sessionStart = null;
+let tickInterval = null;
+
+/* ── MIC PERMISSION ─────────────────────────────────── */
+let micPermission = 'unknown'; // 'unknown' | 'granted' | 'denied' | 'prompt'
+
+async function probeMicPermission() {
+  if (!navigator.permissions || !navigator.permissions.query) return 'unknown';
+  try {
+    const status = await navigator.permissions.query({ name: 'microphone' });
+    micPermission = status.state;
+    if (typeof status.addEventListener === 'function') {
+      status.addEventListener('change', () => { micPermission = status.state; });
+    } else if ('onchange' in status) {
+      status.onchange = () => { micPermission = status.state; };
+    }
+    return status.state;
+  } catch(e) {
+    // Some browsers don't recognise 'microphone' as a permission name
+    return 'unknown';
+  }
+}
+
+function hasSeenMicIntro() {
+  try { return localStorage.getItem('tol-mic-intro-shown') === 'yes'; } catch(e) { return false; }
+}
+function markMicIntroShown() {
+  try { localStorage.setItem('tol-mic-intro-shown', 'yes'); } catch(e) {}
+}
+
+function openMicModal(kind) {
+  const titleEl   = document.getElementById('mic-modal-title');
+  const bodyEl    = document.getElementById('mic-modal-body');
+  const primaryBtn = document.getElementById('mic-modal-primary');
+  const cancelBtn = document.getElementById('mic-modal-cancel');
+
+  if (kind === 'intro') {
+    titleEl.innerHTML = 'Allow <em>Microphone</em>';
+    bodyEl.innerHTML  = `ThinkingOutLoud needs your microphone for voice dictation. <strong style="color:var(--text);">Audio is processed entirely on-device</strong> by Apple's speech recognition. Nothing is uploaded or stored.<br><br>Tap Continue to grant access. iOS will then ask you to confirm.`;
+    primaryBtn.textContent = 'Continue';
+    cancelBtn.textContent  = 'Not Now';
+    primaryBtn.onclick = () => {
+      markMicIntroShown();
+      closeMicModal();
+      startListening();
+    };
+  } else {
+    titleEl.innerHTML = 'Microphone <em>Blocked</em>';
+    bodyEl.innerHTML  = `ThinkingOutLoud doesn't have permission to use the microphone.<br><br><strong style="color:var(--text);">To enable on iOS Safari:</strong><br>1. Tap the <strong>"AA"</strong> in the address bar → Website Settings → Microphone → <strong>Allow</strong><br>2. Or open <strong>Settings → Safari → Microphone</strong> and choose Ask or Allow<br><br>Then return here and tap Try Again.`;
+    primaryBtn.textContent = 'Try Again';
+    cancelBtn.textContent  = 'Close';
+    primaryBtn.onclick = async () => {
+      closeMicModal();
+      await probeMicPermission();
+      if (micPermission === 'denied') {
+        showToast('Still blocked, check site settings');
+        return;
+      }
+      startListening();
+    };
+  }
+
+  document.getElementById('mic-modal').classList.add('show');
+}
+
+function closeMicModal() {
+  document.getElementById('mic-modal').classList.remove('show');
+}
+
+/* ── MODEL CONFIG ───────────────────────────────────── */
+const MODELS = {
+  claude: {
+    label: 'Claude Sonnet 4',
+    keyPrefix: 'sk-ant-',
+    storageKey: 'tol-claude-key',
+    endpoint: 'https://api.anthropic.com/v1/messages',
+    modelId: 'claude-sonnet-4-20250514'
+  },
+  grok: {
+    label: 'Grok 4.1 Fast',
+    keyPrefix: 'xai-',
+    storageKey: 'tol-grok-key',
+    endpoint: 'https://api.x.ai/v1/chat/completions',
+    modelId: 'grok-4-1-fast-non-reasoning'
+  }
+};
+
+let activeModel = 'claude';
+let pendingKeyProvider = null;
+
+/* Migrate legacy single-key storage */
+try {
+  const legacy = localStorage.getItem('tol-api-key');
+  if (legacy && !localStorage.getItem('tol-claude-key')) {
+    localStorage.setItem('tol-claude-key', legacy);
+    localStorage.removeItem('tol-api-key');
+  }
+} catch(e) {}
+
+/* Restore active model */
+try {
+  const saved = localStorage.getItem('tol-active-model');
+  if (saved === 'grok' || saved === 'claude') activeModel = saved;
+} catch(e) {}
+
+/* ── SPEECH RECOGNITION ─────────────────────────────── */
+function buildRecognition() {
+  recognition = new SR();
+  recognition.lang = 'en-GB';
+  recognition.interimResults = true;
+  recognition.continuous = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.onstart = () => {
+    if (!sessionStart) sessionStart = Date.now();
+    setUI(true);
+  };
+
+  recognition.onresult = (e) => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const t = e.results[i][0].transcript;
+      if (e.results[i].isFinal) {
+        if (finalText && !finalText.endsWith(' ') && !finalText.endsWith('\n')) finalText += ' ';
+        finalText += t;
+      } else {
+        interim += t;
+      }
+    }
+    renderTranscript(interim);
+  };
+
+  recognition.onerror = (e) => {
+    if (e.error === 'no-speech' || e.error === 'aborted') return;
+
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      micPermission = 'denied';
+      stopListening();
+      openMicModal('blocked');
+      return;
+    }
+
+    if (e.error === 'audio-capture') {
+      showToast('No microphone available');
+      stopListening();
+      return;
+    }
+
+    showToast('Mic error: ' + e.error);
+    stopListening();
+  };
+
+  recognition.onend = () => {
+    document.getElementById('interim-text').textContent = '';
+    if (keepGoing && isListening) {
+      setTimeout(() => { if (keepGoing && isListening) tryStart(); }, 120);
+    } else {
+      setUI(false);
+    }
+  };
+}
+
+function tryStart() {
+  try { recognition.start(); }
+  catch(e) {
+    setTimeout(() => {
+      try { recognition.start(); } catch(err) { stopListening(); }
+    }, 300);
+  }
+}
+
+async function toggleListening() {
+  if (!SR) return;
+  if (isListening) { stopListening(); return; }
+
+  // Refresh permission state (best-effort)
+  await probeMicPermission();
+
+  // Hard block: explicitly denied
+  if (micPermission === 'denied') {
+    openMicModal('blocked');
+    return;
+  }
+
+  // First-time intro to set expectations before native prompt fires
+  if (!hasSeenMicIntro()) {
+    openMicModal('intro');
+    return;
+  }
+
+  startListening();
+}
+
+function startListening() {
+  isListening = true;
+  keepGoing = true;
+  buildRecognition();
+  tryStart();
+  startTick();
+}
+
+function stopListening() {
+  keepGoing = false;
+  isListening = false;
+  try { recognition && recognition.stop(); } catch(e) {}
+  setUI(false);
+  stopTick();
+}
+
+function setUI(listening) {
+  const btn = document.getElementById('mic-btn');
+  const pill = document.getElementById('status-pill');
+  const wave = document.getElementById('waveform');
+  const label = document.getElementById('btn-label');
+
+  if (listening) {
+    btn.classList.add('listening');
+    pill.classList.add('listening');
+    pill.classList.remove('error', 'polishing');
+    pill.textContent = 'listening';
+    wave.classList.add('active');
+    label.textContent = 'Tap to Stop';
+  } else {
+    btn.classList.remove('listening');
+    pill.classList.remove('listening');
+    if (!pill.classList.contains('polishing')) pill.textContent = 'idle';
+    wave.classList.remove('active');
+    label.textContent = 'Start Dictating';
+  }
+}
+
+function renderTranscript(interim, polished) {
+  const finalEl = document.getElementById('final-text');
+  const interimEl = document.getElementById('interim-text');
+  const emptyEl = document.getElementById('empty-state');
+
+  const hasContent = finalText || interim;
+  emptyEl.classList.toggle('hidden', !!hasContent);
+
+  finalEl.textContent = finalText;
+  interimEl.textContent = interim || '';
+
+  if (polished) {
+    finalEl.classList.remove('polished');
+    void finalEl.offsetWidth;
+    finalEl.classList.add('polished');
+  }
+
+  updateWordCount();
+  updatePolishButton();
+  saveDraft();
+
+  const wrap = document.getElementById('transcript-wrapper');
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function updateWordCount() {
+  const t = finalText.trim();
+  const n = t ? t.split(/\s+/).length : 0;
+  document.getElementById('word-count').textContent = n + (n === 1 ? ' word' : ' words');
+}
+
+function updatePolishButton() {
+  document.getElementById('polish-btn').disabled = !finalText.trim();
+}
+
+function startTick() {
+  tickInterval = setInterval(() => {
+    if (!sessionStart) return;
+    const s = Math.floor((Date.now() - sessionStart) / 1000);
+    const m = Math.floor(s / 60);
+    document.getElementById('duration-label').textContent = m + ':' + String(s % 60).padStart(2,'0');
+  }, 1000);
+}
+
+function stopTick() {
+  clearInterval(tickInterval);
+  tickInterval = null;
+  sessionStart = null;
+  updateStatusLabel();
+}
+
+function updateStatusLabel() {
+  // While listening, the tick handles this; otherwise show draft state or default
+  if (sessionStart) return;
+  const el = document.getElementById('duration-label');
+  el.textContent = finalText.trim() ? 'draft saved' : 'en-GB';
+}
+
+/* ── DRAFT PERSISTENCE ──────────────────────────────── */
+const DRAFT_KEY = 'tol-draft';
+let draftSaveTimer = null;
+
+function saveDraft() {
+  // Debounced — wait 500ms after the last change before writing
+  clearTimeout(draftSaveTimer);
+  draftSaveTimer = setTimeout(() => {
+    try {
+      if (finalText.trim()) {
+        localStorage.setItem(DRAFT_KEY, finalText);
+      } else {
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    } catch(e) {}
+    updateStatusLabel();
+  }, 500);
+}
+
+function restoreDraft() {
+  try {
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (saved && saved.trim()) {
+      finalText = saved;
+      renderTranscript('');
+      updateStatusLabel();
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function clearDraft() {
+  clearTimeout(draftSaveTimer);
+  try { localStorage.removeItem(DRAFT_KEY); } catch(e) {}
+}
+
+/* ── ACTIONS ────────────────────────────────────────── */
+function copyText() {
+  const t = finalText.trim();
+  if (!t) { showToast('Nothing to copy yet'); return; }
+  const done = () => {
+    const btn = document.getElementById('copy-btn');
+    btn.classList.add('done');
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 15 4 11"/></svg> Done`;
+    showToast('Copied to clipboard');
+    setTimeout(() => {
+      btn.classList.remove('done');
+      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+    }, 2200);
+  };
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(t).then(done).catch(() => fallbackCopy(t, done));
+  } else { fallbackCopy(t, done); }
+}
+
+function fallbackCopy(text, cb) {
+  const ta = Object.assign(document.createElement('textarea'), {
+    value: text, style: 'position:fixed;opacity:0;pointer-events:none;'
+  });
+  document.body.appendChild(ta);
+  ta.focus(); ta.select();
+  try { document.execCommand('copy'); cb(); } catch(e) { showToast('Select text manually to copy'); }
+  document.body.removeChild(ta);
+}
+
+function shareText() {
+  const t = finalText.trim();
+  if (!t) { showToast('Nothing to share yet'); return; }
+  if (navigator.share) navigator.share({ text: t }).catch(() => {});
+  else copyText();
+}
+
+function clearText() {
+  if (!finalText.trim()) return;
+  finalText = '';
+  document.getElementById('final-text').textContent = '';
+  document.getElementById('interim-text').textContent = '';
+  document.getElementById('empty-state').classList.remove('hidden');
+  updateWordCount();
+  updatePolishButton();
+  clearDraft();
+  sessionStart = null;
+  updateStatusLabel();
+}
+
+/* ── MODEL SWITCHER ─────────────────────────────────── */
+function setActiveModel(m) {
+  if (!MODELS[m]) return;
+  activeModel = m;
+  try { localStorage.setItem('tol-active-model', m); } catch(e) {}
+  refreshModelUI();
+}
+
+function refreshModelUI() {
+  document.getElementById('opt-claude').classList.toggle('active', activeModel === 'claude');
+  document.getElementById('opt-grok').classList.toggle('active', activeModel === 'grok');
+  document.getElementById('active-model-name').textContent = MODELS[activeModel].label;
+}
+
+/* ── POLISH (model-aware) ───────────────────────────── */
+const POLISH_SYSTEM = `You clean up voice dictation transcripts. Your job:
+
+- Remove filler words (um, uh, like, you know, basically, actually, sort of, kind of, I mean, so yeah)
+- Add proper punctuation, capitalisation, and paragraph breaks where natural
+- Fix obvious speech-recognition errors when context makes the intent clear
+- Preserve the speaker's voice, vocabulary, register, and meaning exactly. Do not paraphrase or rewrite
+- Do not add new content, do not change the substance, do not make it more formal than it was
+- If genuinely ambiguous, keep the original wording
+- Use British English spelling
+
+Return only the cleaned transcript. No preamble, no quotes, no commentary.`;
+
+async function polishText() {
+  const t = finalText.trim();
+  if (!t) return;
+
+  const provider = activeModel;
+  const apiKey = getApiKeyFor(provider);
+  if (!apiKey) { openKeyModalFor(provider); return; }
+
+  setPolishBusy(true);
+
+  try {
+    let polished;
+    if (provider === 'claude') {
+      polished = await callClaude(apiKey, t);
+    } else if (provider === 'grok') {
+      polished = await callGrok(apiKey, t);
+    }
+
+    if (!polished) {
+      showToast('Empty response, try again');
+      setPolishBusy(false);
+      return;
+    }
+
+    finalText = polished;
+    renderTranscript('', true);
+    showToast('Polished via ' + MODELS[provider].label);
+  } catch(e) {
+    showToast(e.message || 'Polish failed, try again');
+    console.error(e);
+  } finally {
+    setPolishBusy(false);
+  }
+}
+
+async function callClaude(apiKey, text) {
+  const res = await fetch(MODELS.claude.endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: MODELS.claude.modelId,
+      max_tokens: 4000,
+      system: POLISH_SYSTEM,
+      messages: [{ role: 'user', content: text }]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 401) throw new Error('Invalid Claude key');
+    throw new Error('Claude: ' + (err?.error?.message || ('HTTP ' + res.status)));
+  }
+
+  const data = await res.json();
+  return data.content?.filter(c => c.type === 'text').map(c => c.text).join('\n').trim();
+}
+
+async function callGrok(apiKey, text) {
+  const res = await fetch(MODELS.grok.endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + apiKey
+    },
+    body: JSON.stringify({
+      model: MODELS.grok.modelId,
+      max_tokens: 4000,
+      messages: [
+        { role: 'system', content: POLISH_SYSTEM },
+        { role: 'user', content: text }
+      ]
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    if (res.status === 401) throw new Error('Invalid Grok key');
+    throw new Error('Grok: ' + (err?.error?.message || err?.message || ('HTTP ' + res.status)));
+  }
+
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content?.trim();
+}
+
+function setPolishBusy(busy) {
+  const btn = document.getElementById('polish-btn');
+  const icon = document.getElementById('polish-icon');
+  const label = document.getElementById('polish-label');
+  const pill = document.getElementById('status-pill');
+
+  if (busy) {
+    btn.classList.add('busy');
+    btn.disabled = true;
+    icon.innerHTML = '<span class="spinner"></span>';
+    label.textContent = 'Polishing via ' + MODELS[activeModel].label.split(' ')[0] + '…';
+    pill.classList.add('polishing');
+    pill.textContent = 'polishing';
+  } else {
+    btn.classList.remove('busy');
+    btn.disabled = !finalText.trim();
+    icon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6L12 2z"/></svg>`;
+    label.textContent = 'Polish';
+    pill.classList.remove('polishing');
+    pill.textContent = 'idle';
+  }
+}
+
+/* ── API KEY MGMT ───────────────────────────────────── */
+function getApiKeyFor(provider) {
+  try { return localStorage.getItem(MODELS[provider].storageKey) || ''; } catch(e) { return ''; }
+}
+function setApiKeyFor(provider, k) {
+  try { localStorage.setItem(MODELS[provider].storageKey, k); } catch(e) {}
+}
+function clearApiKeyFor(provider) {
+  try { localStorage.removeItem(MODELS[provider].storageKey); } catch(e) {}
+  showToast(MODELS[provider].label.split(' ')[0] + ' key removed');
+  refreshSettingsUI();
+}
+
+function openKeyModalFor(provider) {
+  pendingKeyProvider = provider;
+  const isClaude = provider === 'claude';
+  const titleEl = document.getElementById('key-modal-title');
+  const descEl  = document.getElementById('key-modal-desc');
+  const inputEl = document.getElementById('key-input');
+
+  if (isClaude) {
+    titleEl.innerHTML = 'Connect <em>Claude</em>';
+    descEl.innerHTML = 'To polish via Claude, ThinkingOutLoud sends text to Anthropic using your own API key. Stored only on this device, never on a server.<br><br>Get one at <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a>';
+    inputEl.placeholder = 'sk-ant-...';
+  } else {
+    titleEl.innerHTML = 'Connect <em>Grok</em>';
+    descEl.innerHTML = 'To polish via Grok, ThinkingOutLoud sends text to xAI using your own API key. Stored only on this device, never on a server.<br><br>Get one at <a href="https://console.x.ai/" target="_blank" rel="noopener">console.x.ai</a><br><br><strong style="color:var(--accent);">Note:</strong> review your xAI data sharing settings before sending sensitive content.';
+    inputEl.placeholder = 'xai-...';
+  }
+
+  inputEl.value = '';
+  document.getElementById('key-modal').classList.add('show');
+  setTimeout(() => inputEl.focus(), 200);
+}
+
+function closeKeyModal() {
+  document.getElementById('key-modal').classList.remove('show');
+  pendingKeyProvider = null;
+}
+
+function saveApiKey() {
+  if (!pendingKeyProvider) return;
+  const v = document.getElementById('key-input').value.trim();
+  const expectedPrefix = MODELS[pendingKeyProvider].keyPrefix;
+
+  if (!v.startsWith(expectedPrefix)) {
+    showToast(`That doesn't look like a ${MODELS[pendingKeyProvider].label.split(' ')[0]} key`);
+    return;
+  }
+
+  setApiKeyFor(pendingKeyProvider, v);
+  const provider = pendingKeyProvider;
+  closeKeyModal();
+  refreshSettingsUI();
+
+  // If the key is for the active model, polish immediately
+  if (provider === activeModel) {
+    showToast('Key saved, polishing…');
+    setTimeout(polishText, 300);
+  } else {
+    showToast(MODELS[provider].label.split(' ')[0] + ' key saved');
+  }
+}
+
+function openSettings() {
+  refreshSettingsUI();
+  document.getElementById('settings-modal').classList.add('show');
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('show');
+}
+
+function refreshSettingsUI() {
+  ['claude', 'grok'].forEach(p => {
+    const el = document.getElementById(p + '-status');
+    const has = !!getApiKeyFor(p);
+    el.textContent = has ? 'set' : 'unset';
+    el.classList.toggle('set', has);
+    el.classList.toggle('unset', !has);
+  });
+}
+
+/* Close modals on overlay click */
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (e.target === el) {
+      el.classList.remove('show');
+      if (el.id === 'key-modal') pendingKeyProvider = null;
+    }
+  });
+});
+
+/* ── THEME ──────────────────────────────────────────── */
+const ACCENTS = ['ember', 'crimson', 'forest', 'cobalt', 'plum', 'graphite'];
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.body.setAttribute('data-theme', theme);
+  const moon = document.getElementById('icon-moon');
+  const sun = document.getElementById('icon-sun');
+  moon.style.display = theme === 'dark'  ? 'block' : 'none';
+  sun.style.display  = theme === 'light' ? 'block' : 'none';
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('tol-theme', next); } catch(e) {}
+}
+
+function applyAccent(accent) {
+  if (!ACCENTS.includes(accent)) accent = 'ember';
+  document.documentElement.setAttribute('data-accent', accent);
+  document.body.setAttribute('data-accent', accent);
+  document.querySelectorAll('.accent-swatch').forEach(el => {
+    el.classList.toggle('active', el.dataset.accent === accent);
+  });
+}
+
+function setAccent(accent) {
+  applyAccent(accent);
+  try { localStorage.setItem('tol-accent', accent); } catch(e) {}
+}
+
+try {
+  const savedTheme = localStorage.getItem('tol-theme');
+  applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+} catch(e) {
+  applyTheme('dark');
+}
+
+try {
+  const savedAccent = localStorage.getItem('tol-accent');
+  applyAccent(savedAccent || 'ember');
+} catch(e) {
+  applyAccent('ember');
+}
+
+/* ── TOAST ──────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ── INIT ───────────────────────────────────────────── */
+refreshModelUI();
+probeMicPermission();
+restoreDraft();
+</script>
+</body>
+</html>
