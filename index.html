@@ -6,8 +6,21 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ThinkingOutLoud">
+<meta name="theme-color" content="#0D0A07">
+
+<!-- iOS home screen icon -->
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+<!-- Standard favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
+<!-- PWA manifest for desktop install -->
+<link rel="manifest" href="manifest.json">
+
 <title>ThinkingOutLoud</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --radius-lg: 18px;
@@ -65,7 +78,7 @@ html[data-accent="graphite"], body[data-accent="graphite"] {
 html[data-theme="dark"], body[data-theme="dark"] {
   --bg: #0D0A07; --bg-raised: #141009; --surface: #1A1410;
   --border: #2A2218; --border-mid: #3A3020;
-  --text: #EDE8DF; --text-mid: #8C8070; --text-dim: #4A4035; --text-interim: #B8A890;
+  --text: #F5F1E8; --text-mid: #B5A896; --text-dim: #6E6253; --text-interim: #D4C7B0;
   --pill-bg: #1A1410; --overlay: rgba(0,0,0,0.7);
   --shadow-modal: 0 24px 60px rgba(0,0,0,0.55);
   --shadow-toast: 0 8px 24px rgba(0,0,0,0.45);
@@ -73,7 +86,7 @@ html[data-theme="dark"], body[data-theme="dark"] {
 html[data-theme="light"], body[data-theme="light"] {
   --bg: #FAF7F2; --bg-raised: #FFFDF8; --surface: #F0EAE0;
   --border: #DCD3C2; --border-mid: #C4B8A2;
-  --text: #1A1410; --text-mid: #6B5F4F; --text-dim: #A89E8C; --text-interim: #8A8070;
+  --text: #1A1410; --text-mid: #5A4F3F; --text-dim: #8A7E6B; --text-interim: #6B5F4F;
   --pill-bg: #F0EAE0; --overlay: rgba(40,30,20,0.45);
   --shadow-modal: 0 24px 60px rgba(60,40,20,0.18);
   --shadow-toast: 0 8px 24px rgba(60,40,20,0.15);
@@ -156,20 +169,20 @@ body {
 
 .empty-state {
   position: absolute; top: 0; left: 0;
-  font-family: var(--font-display); font-style: italic; font-weight: 300;
-  font-size: 18px; color: var(--text-dim); line-height: 1.6;
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: 18px; color: var(--text-mid); line-height: 1.6;
   pointer-events: none;
   transition: opacity 0.4s ease, color 0.35s ease;
 }
 .empty-state .tagline {
   display: block; font-family: var(--font-mono); font-style: normal;
   font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--text-dim); margin-top: 14px; opacity: 0.6;
+  color: var(--text-dim); margin-top: 14px; opacity: 0.85;
 }
 .empty-state.hidden { opacity: 0; }
 
 #final-text, #interim-text {
-  font-family: var(--font-display); font-weight: 300;
+  font-family: var(--font-display); font-weight: 400;
   font-size: 19px; line-height: 1.75;
   white-space: pre-wrap; word-break: break-word;
   transition: color 0.35s ease;
@@ -837,7 +850,7 @@ body[data-theme="light"] .mic-btn::before {
     <div class="modal-actions">
       <button class="modal-btn primary" onclick="closeSettings()">Done</button>
     </div>
-    <div class="modal-footer">v1.6 · editable transcripts</div>
+    <div class="modal-footer">v1.8 · improved readability</div>
   </div>
 </div>
 
