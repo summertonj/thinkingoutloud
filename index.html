@@ -177,6 +177,27 @@ body {
 #final-text { color: var(--text); }
 #interim-text { color: var(--text-interim); font-style: italic; }
 #final-text.polished { animation: polish-reveal 0.6s ease; }
+
+/* Editable transcript */
+#final-text {
+  outline: none;
+  caret-color: var(--accent);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin: -2px -6px;
+  min-height: 32px;
+  transition: background 0.2s ease, color 0.35s ease;
+  -webkit-user-select: text;
+  user-select: text;
+}
+#final-text:focus {
+  background: var(--accent-soft);
+  box-shadow: -3px 0 0 0 var(--accent);
+}
+#final-text[contenteditable="false"] {
+  caret-color: transparent;
+}
+
 @keyframes polish-reveal {
   0%   { opacity: 0; transform: translateY(4px); filter: blur(2px); }
   100% { opacity: 1; transform: translateY(0);  filter: blur(0);  }
@@ -652,9 +673,9 @@ body[data-theme="light"] .mic-btn::before {
   <div class="transcript-area">
     <div class="empty-state" id="empty-state">
       tap the button and start speaking
-      <span class="tagline">// dictate · choose model · polish</span>
+      <span class="tagline">// dictate · edit · polish</span>
     </div>
-    <div id="final-text"></div>
+    <div id="final-text" contenteditable="true" spellcheck="true" autocapitalize="sentences" autocorrect="on" aria-label="Transcript, tap to edit"></div>
     <div id="interim-text"></div>
     <div class="waveform" id="waveform">
       <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
@@ -815,7 +836,7 @@ body[data-theme="light"] .mic-btn::before {
     <div class="modal-actions">
       <button class="modal-btn primary" onclick="closeSettings()">Done</button>
     </div>
-    <div class="modal-footer">v1.5 · auto-saved drafts</div>
+    <div class="modal-footer">v1.6 · editable transcripts</div>
   </div>
 </div>
 
@@ -1063,6 +1084,7 @@ function setUI(listening) {
   const pill = document.getElementById('status-pill');
   const wave = document.getElementById('waveform');
   const label = document.getElementById('btn-label');
+  const finalEl = document.getElementById('final-text');
 
   if (listening) {
     btn.classList.add('listening');
@@ -1071,13 +1093,42 @@ function setUI(listening) {
     pill.textContent = 'listening';
     wave.classList.add('active');
     label.textContent = 'Tap to Stop';
+    // Lock editing during dictation to avoid cursor/text conflicts
+    if (document.activeElement === finalEl) finalEl.blur();
+    finalEl.setAttribute('contenteditable', 'false');
   } else {
     btn.classList.remove('listening');
     pill.classList.remove('listening');
     if (!pill.classList.contains('polishing')) pill.textContent = 'idle';
     wave.classList.remove('active');
     label.textContent = 'Start Dictating';
+    finalEl.setAttribute('contenteditable', 'true');
   }
+}
+
+/* ── MANUAL EDITING ─────────────────────────────────── */
+function handleTranscriptEdit() {
+  const finalEl = document.getElementById('final-text');
+  // Read what the user typed back into our state
+  finalText = finalEl.textContent || '';
+  // Hide empty-state if there's now content (or show it if all cleared)
+  document.getElementById('empty-state').classList.toggle('hidden', !!finalText.trim());
+  updateWordCount();
+  updatePolishButton();
+  saveDraft();
+}
+
+function attachEditHandlers() {
+  const finalEl = document.getElementById('final-text');
+
+  finalEl.addEventListener('input', handleTranscriptEdit);
+
+  // Strip rich formatting on paste — only plain text
+  finalEl.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
 }
 
 function renderTranscript(interim, polished) {
@@ -1516,6 +1567,7 @@ function showToast(msg) {
 /* ── INIT ───────────────────────────────────────────── */
 refreshModelUI();
 probeMicPermission();
+attachEditHandlers();
 restoreDraft();
 </script>
 </body>
